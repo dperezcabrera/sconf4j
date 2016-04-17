@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j;
+package com.github.dperezcabrera.sconf4j.core;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+@FunctionalInterface 
+public interface ContainerLoader {
 
-    public void onChange(T obj);
+    public void load(BeanContainer registry);
 }

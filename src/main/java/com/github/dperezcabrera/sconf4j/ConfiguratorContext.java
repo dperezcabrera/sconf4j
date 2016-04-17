@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,25 @@
  */
 package com.github.dperezcabrera.sconf4j;
 
+import com.github.dperezcabrera.sconf4j.core.BeanContainer;
+
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+public class ConfiguratorContext {
 
-    public void onChange(T obj);
+    private BeanContainer beanContainer;
+
+    public ConfiguratorContext(BeanContainer beanContainer) {
+        this.beanContainer = beanContainer;
+    }
+
+    public BeanContainer getBeanContainer() {
+        return beanContainer;
+    }
+
+    public void setBeanContainer(BeanContainer beanContainer) {
+        this.beanContainer = beanContainer;
+    }
 }

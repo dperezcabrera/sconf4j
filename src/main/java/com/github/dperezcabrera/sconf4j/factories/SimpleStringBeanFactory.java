@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,14 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j;
+package com.github.dperezcabrera.sconf4j.factories;
+
+import com.github.dperezcabrera.sconf4j.core.BeanFactory;
+import com.github.dperezcabrera.sconf4j.core.DataContext;
+import com.github.dperezcabrera.sconf4j.core.TypeSupplier;
+import java.util.function.Function;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+public class SimpleStringBeanFactory implements BeanFactory {
 
-    public void onChange(T obj);
+    Function<String, Object> function;
+
+    public SimpleStringBeanFactory(Function<String, Object> function) {
+        this.function = function;
+    }
+
+    @Override
+    public Object get(DataContext dataSet, String propertyName, TypeSupplier typeSupplier) {
+        return function.apply(dataSet.getDataProvider().getProperty(propertyName));
+    }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,21 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.factories;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.dperezcabrera.sconf4j.core.BeanFactory;
+import com.github.dperezcabrera.sconf4j.core.Cacheable;
+import com.github.dperezcabrera.sconf4j.core.DataContext;
+import com.github.dperezcabrera.sconf4j.core.TypeSupplier;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Mapping {
+public class CacheableBeanFactory implements BeanFactory {
 
-    public Class<?>[] value();
-    String property() default "";
+    private BeanFactory factory;
+
+    public CacheableBeanFactory(BeanFactory factory) {
+        this.factory = factory;
+    }
+
+    @Override
+    public Object get(DataContext dataSet, String propertyName, TypeSupplier typeSupplier) {
+        return (Cacheable) () -> factory.get(dataSet, propertyName, typeSupplier);
+    }
 }

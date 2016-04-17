@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.core.utils;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -40,12 +40,12 @@ public class ReadWriteLockUtility {
         writeLock = lock.writeLock();
     }
 
-    public void read(Runnable run) {
-        lock(readLock, run);
+    public void read(Action action) {
+        lock(readLock, action);
     }
 
-    public void write(Runnable run) {
-        lock(writeLock, run);
+    public void write(Action action) {
+        lock(writeLock, action);
     }
 
     public <T> T read(Supplier<T> supplier) {
@@ -56,12 +56,12 @@ public class ReadWriteLockUtility {
         return lock(writeLock, supplier);
     }
 
-    public void read(BooleanSupplier condition, Runnable run) {
-        lock(readLock, condition, run);
+    public void read(BooleanSupplier condition,Action action) {
+        lock(readLock, condition, action);
     }
 
-    public void write(BooleanSupplier condition, Runnable run) {
-        lock(writeLock, condition, run);
+    public void write(BooleanSupplier condition,Action action) {
+        lock(writeLock, condition, action);
     }
 
     public <T> T read(BooleanSupplier condition, Supplier<T> supplier) {
@@ -72,20 +72,20 @@ public class ReadWriteLockUtility {
         return lock(writeLock, condition, supplier);
     }
 
-    private void lock(Lock lock, Runnable run) {
+    private void lock(Lock lock,Action action) {
         lock.lock();
         try {
-            run.run();
+            action.execute();
         } finally {
             lock.unlock();
         }
     }
 
-    private void lock(Lock lock, BooleanSupplier condition, Runnable run) {
+    private void lock(Lock lock, BooleanSupplier condition,Action action) {
         lock.lock();
         try {
             if (condition.getAsBoolean()) {
-                run.run();
+                action.execute();
             }
         } finally {
             lock.unlock();
@@ -114,5 +114,11 @@ public class ReadWriteLockUtility {
             lock.unlock();
         }
         return result;
+    }
+
+    @FunctionalInterface
+    public interface Action {
+
+        void execute();
     }
 }

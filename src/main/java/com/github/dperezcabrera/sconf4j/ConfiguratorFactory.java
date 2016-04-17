@@ -16,14 +16,8 @@
  */
 package com.github.dperezcabrera.sconf4j;
 
-import com.github.dperezcabrera.sconf4j.fluent.DataSetBase;
-import com.github.dperezcabrera.sconf4j.fluent.InstanceBuilder;
-import com.github.dperezcabrera.sconf4j.fluent.InstanceBuilderBase;
-import com.github.dperezcabrera.sconf4j.fluent.InterfaceBridge;
-import com.github.dperezcabrera.sconf4j.fluent.PropertiesDataProvider;
-import com.github.dperezcabrera.sconf4j.fluent.TypeAdapter;
-import com.github.dperezcabrera.sconf4j.fluent.TypeAdapterBase;
-import java.util.Properties;
+import com.github.dperezcabrera.sconf4j.core.utils.ConcurrentCache;
+import com.github.dperezcabrera.sconf4j.core.utils.ReadWriteLockCache;
 
 /**
  *
@@ -31,39 +25,25 @@ import java.util.Properties;
  */
 public final class ConfiguratorFactory {
 
-    static InterfaceBridge bridge = new AllowInterfaceBridge();
-    static InstanceBuilder instanceProxyBuilder = new InstanceBuilderBase(bridge);
-    static TypeAdapter typeAdapter = new TypeAdapterBase();
+    private static final ConfiguratorFactory INSTANCE = new ConfiguratorFactory();
+
+    private ConcurrentCache<Class<?>, Configurator> configurators = new ReadWriteLockCache<>();
+    private ConfiguratorBuilder builder = type -> new MicroConfigurator(type);
 
     private ConfiguratorFactory() {
     }
 
-    public static <K> Configurator<K> configurator(Class<K> owner) {
+    public static <K> Configurator<K> configurator(Class<K> typeOwner) {
+        return INSTANCE.getConfigurator(typeOwner);
+    }
 
-        return new Configurator<K>() {
-            public <T> T get(Class<T> target, String param) {
-                return null;
-            }
+    private <K> Configurator<K> getConfigurator(Class<K> typeOwner) {
+        return configurators.get(typeOwner, () -> builder.build(typeOwner));
+    }
 
-            @Override
-            public <T> T get(Class<T> target) {
-                return null;
-            }
+    @FunctionalInterface
+    private interface ConfiguratorBuilder<T> {
 
-            @Override
-            public <T> void subscribe(Class<T> target, Subscriber<T> subscriber) {
-
-            }
-
-            @Override
-            public <T> T get(Class<T> target, Properties properties) {
-                return null;
-            }
-
-            @Override
-            public <T> T get(Class<T> target, Properties properties, String param) {
-                return instanceProxyBuilder.build(new DataSetBase(new PropertiesDataProvider(properties), instanceProxyBuilder, typeAdapter), param, target);
-            }
-        };
+        Configurator<T> build(Class<T> type);
     }
 }

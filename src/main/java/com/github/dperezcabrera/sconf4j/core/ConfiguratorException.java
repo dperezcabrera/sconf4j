@@ -14,13 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.core;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public interface InstanceBuilder {
+public class ConfiguratorException extends RuntimeException {
 
-    <T> T build(DataSet dataSet, String prefix, Class<T> type);
+    public ConfiguratorException(String message) {
+        super(message);
+    }
+
+    public ConfiguratorException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

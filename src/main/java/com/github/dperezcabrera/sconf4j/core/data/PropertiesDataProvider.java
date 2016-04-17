@@ -14,14 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j;
+package com.github.dperezcabrera.sconf4j.core.data;
+
+import com.github.dperezcabrera.sconf4j.core.DataProvider;
+import com.github.dperezcabrera.sconf4j.core.utils.PropertyUtils;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+public class PropertiesDataProvider implements DataProvider {
 
-    public void onChange(T obj);
+    Properties properties;
+
+    public PropertiesDataProvider(Properties properties) {
+        this.properties = properties;
+    }
+    
+    @Override
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    @Override
+    public Set<String> getSubProperties(String key) {
+        return PropertyUtils.subproperties( properties.stringPropertyNames(), key);
+    }
 }

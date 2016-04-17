@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j;
+package com.github.dperezcabrera.sconf4j.core;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+@FunctionalInterface 
+public interface BeanInitializer {
 
-    public void onChange(T obj);
+    Object init(Object object, DataContext dataSet, String propertyName, TypeSupplier typeSupplier);
 }

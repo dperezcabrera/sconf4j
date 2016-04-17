@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,15 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.core;
 
-import java.lang.reflect.InvocationHandler;
+import java.util.function.Supplier;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public interface InterfaceBridge {
+public class TypeSupplierBase implements TypeSupplier {
 
-    InvocationHandler buidBridge(Class<?> type, InvocationHandler target);
+    Supplier<Class<?>> supplier;
+
+    public TypeSupplierBase(Supplier<Class<?>> supplier) {
+        this.supplier = supplier;
+    }
+    
+    @Override
+    public TypeSupplier getPropertyTypeSupplier(String propertyName) {
+        return null;
+    }
+
+    @Override
+    public Class<?> get() {
+        return supplier.get();
+    }
+
+    @Override
+    public TypeSupplier changeType(Class<?> type) {
+        return new TypeSupplierBase(() -> type);
+    }
 }

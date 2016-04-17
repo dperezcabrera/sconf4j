@@ -14,30 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
-
-import java.util.Properties;
-import java.util.Set;
+package com.github.dperezcabrera.sconf4j.core;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class PropertiesDataProvider implements DataProvider {
+public interface DataContext {
 
-    Properties properties;
+    public DataProvider getDataProvider();
 
-    public PropertiesDataProvider(Properties properties) {
-        this.properties = properties;
-    }
-    
-    @Override
-    public String getProperty(String Key) {
-        return properties.getProperty(Key);
-    }
-
-    @Override
-    public Set<String> getPropertyNames() {
-        return properties.stringPropertyNames();
-    }
+    public BeanFactory getBeanFactory();
 }

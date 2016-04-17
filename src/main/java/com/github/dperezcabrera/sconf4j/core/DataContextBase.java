@@ -14,17 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.core;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public interface DataSet {
+public class DataContextBase implements DataContext {
 
-    public DataProvider getDataProvider();
+    DataProvider dataProvider;
+    BeanFactory beanFactory;
 
-    public TypeAdapter getAdapter(Class<?> type);
+    public DataContextBase(DataProvider dataProvider, BeanFactory beanFactory) {
+        this.dataProvider = dataProvider;
+        this.beanFactory = beanFactory;
+    }
 
-    public <T> T newProxyInstance(String prefix, Class<T> type);
+    @Override
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    @Override
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
+    }
 }

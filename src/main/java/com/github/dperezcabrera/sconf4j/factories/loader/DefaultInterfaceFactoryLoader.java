@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,15 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.factories.loader;
 
-import java.lang.reflect.Method;
+import com.github.dperezcabrera.sconf4j.core.BeanFactory;
+import com.github.dperezcabrera.sconf4j.factories.FluentInterfaceFactory;
+import java.util.LinkedHashMap;
+import java.util.function.Predicate;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public interface TypeAdapter {
+public class DefaultInterfaceFactoryLoader extends AbstractLoader {
 
-    Object adapt(DataSet dataSet, String propertyName, Method invokeMethod, int dimension);
+    public DefaultInterfaceFactoryLoader() {
+        super(getFactories());
+    }
+
+    private static LinkedHashMap<Predicate<Class<?>>, BeanFactory> getFactories() {
+        LinkedHashMap<Predicate<Class<?>>, BeanFactory> result = new LinkedHashMap<>();
+        result.put(type -> type.isInterface(),new FluentInterfaceFactory());
+        return result;
+    }
 }

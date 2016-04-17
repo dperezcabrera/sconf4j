@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.fluent;
+package com.github.dperezcabrera.sconf4j.core;
 
 import java.util.Set;
 
@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public interface DataProvider {
 
-    public String getProperty(String Key);
-
-    public Set<String> getPropertyNames();
+    public String getProperty(String key);
+    
+    public Set<String> getSubProperties(String key);
 }

@@ -25,6 +25,7 @@ import java.util.Properties;
  */
 public interface Configurator<K> {
 
+    public Class<K> getType();
     public <T> T get(Class<T> target);
     public <T> T get(Class<T> target, String param);
     public <T> T get(Class<T> target, Properties properties);
