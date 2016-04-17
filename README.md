@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/dperezcabrera/sconf4j/badge.svg?branch=master)](https://coveralls.io/github/dperezcabrera/sconf4j?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues-raw/dperezcabrera/sconf4j.svg?maxAge=2592000)](https://github.com/dperezcabrera/sconf4j/issues)
 
+
 # Simple Configurator for Java
 
 The Simple Configurator for Java software library provides a simple configurator interface which enables a Java application to read configuration data from properties easily.
