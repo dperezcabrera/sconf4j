@@ -1,0 +1,17 @@
+install:
+- git clone https://github.com/dperezcabrera/sconf4j.git
+language: java
+jdk:
+- oraclejdk8
+sudo: false
+script: mvn clean verify
+cache:
+  directories:
+  - "$HOME/.m2"
+after_success:
+- mvn clean test jacoco:report coveralls:jacoco
+
+notifications:
+  email:
+  - dperezcabrera@gmail.com
+
