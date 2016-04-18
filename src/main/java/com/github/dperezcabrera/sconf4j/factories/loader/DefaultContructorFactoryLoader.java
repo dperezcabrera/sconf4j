@@ -20,7 +20,6 @@ import com.github.dperezcabrera.sconf4j.core.BeanFactory;
 import com.github.dperezcabrera.sconf4j.core.TypeSupplierBase;
 import com.github.dperezcabrera.sconf4j.core.utils.PropertyUtils;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
