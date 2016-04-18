@@ -27,8 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.github.dperezcabrera.sconf4j.core.BeanContainer;
 import com.github.dperezcabrera.sconf4j.core.ConfiguratorException;
 
@@ -37,8 +35,6 @@ import com.github.dperezcabrera.sconf4j.core.ConfiguratorException;
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 public class BeanContainerBase implements BeanContainer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BeanContainerBase.class);
 
     Map<Predicate<Class<?>>, BeanFactory> beanFactories = new LinkedHashMap<>();
     Map<Predicate<Class<?>>, BeanInitializer> beanInitializers = new LinkedHashMap<>();
@@ -98,7 +94,7 @@ public class BeanContainerBase implements BeanContainer {
                     return get(e.getValue(), dataSet, propertyName, typeSupplier);
                 }
             }
-            throw new ConfiguratorException("There isn't a valid factory for "+type);
+            throw new ConfiguratorException("Could not build an Object to property '"+propertyName+"' with type: "+type);
         }
         return null;
     }

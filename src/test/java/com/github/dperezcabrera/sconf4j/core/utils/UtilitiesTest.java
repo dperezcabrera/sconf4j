@@ -16,14 +16,12 @@
  */
 package com.github.dperezcabrera.sconf4j.core.utils;
 
-import com.github.dperezcabrera.sconf4j.core.utils.Utilities;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
@@ -107,7 +105,6 @@ public class UtilitiesTest {
      * Test of isCharacter method, of class Utilities.
      */
     @Test
-    @Ignore
     public void testIsCharacter() {
         System.out.println("isCharacter");
         Class type = char.class;

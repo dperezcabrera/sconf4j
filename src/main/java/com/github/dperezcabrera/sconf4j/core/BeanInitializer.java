@@ -23,5 +23,5 @@ package com.github.dperezcabrera.sconf4j.core;
 @FunctionalInterface 
 public interface BeanInitializer {
 
-    Object init(Object object, DataContext dataSet, String propertyName, TypeSupplier typeSupplier);
+    Object init(Object object, DataContext context, String propertyName, TypeSupplier typeSupplier);
 }

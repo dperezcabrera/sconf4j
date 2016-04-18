@@ -16,7 +16,6 @@
  */
 package com.github.dperezcabrera.sconf4j.core.utils;
 
-import com.github.dperezcabrera.sconf4j.core.utils.ReadWriteLockCache;
 import java.util.function.Supplier;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -31,6 +30,8 @@ import static org.mockito.Mockito.verify;
 public class ReadWriteLockCacheTest {
 
     ReadWriteLockCache instance = new ReadWriteLockCache();
+
+    Supplier<Object> supplierMock = mock(Supplier.class);
 
     /**
      * Test of get method, of class ReadWriteLockCache.
@@ -55,13 +56,12 @@ public class ReadWriteLockCacheTest {
 
         String key = "key";
         Object expResult = new Object();
-        Supplier<Object> s = () -> expResult;
-        instance.get(key, s);
-        s = mock(Supplier.class);
+        Supplier<Object> supplier = () -> expResult;
+        instance.get(key, supplier);
 
-        Object result = instance.get(key, s);
+        Object result = instance.get(key, supplierMock);
 
-        verify(s, times(0)).get();
+        verify(supplierMock, times(0)).get();
         assertEquals(expResult, result);
     }
 
@@ -80,9 +80,8 @@ public class ReadWriteLockCacheTest {
 
         instance.put(key, expResult);
 
-        s = mock(Supplier.class);
-        assertEquals(expResult, instance.get(key, s));
-        verify(s, times(0)).get();
+        assertEquals(expResult, instance.get(key, supplierMock));
+        verify(supplierMock, times(0)).get();
     }
 
     /**
@@ -101,7 +100,7 @@ public class ReadWriteLockCacheTest {
             instance.put(key, expResult);
             return firstValue;
         };
-        
+
         Object result = instance.get(key, s);
 
         assertEquals(expResult, result);

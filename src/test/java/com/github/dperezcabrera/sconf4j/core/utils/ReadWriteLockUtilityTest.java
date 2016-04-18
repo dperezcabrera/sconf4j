@@ -24,8 +24,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -34,17 +34,21 @@ import static org.mockito.Mockito.verify;
  */
 public class ReadWriteLockUtilityTest {
 
-    ReadWriteLock mainLock = mock(ReadWriteLock.class);
-    Lock readLock = mock(Lock.class);
-    Lock writeLock = mock(Lock.class);
-    
+    ReadWriteLock mainLockMock = mock(ReadWriteLock.class);
+    Lock readLockMock = mock(Lock.class);
+    Lock writeLockMock = mock(Lock.class);
+
+    ReadWriteLockUtility.Action actionMock = mock(ReadWriteLockUtility.Action.class);
+    Supplier supplierMock = mock(Supplier.class);
+    BooleanSupplier booleanSupplierMock = mock(BooleanSupplier.class);
+
     ReadWriteLockUtility instance;
 
     @Before
     public void beforeTest() {
-        given(mainLock.readLock()).willReturn(readLock);
-        given(mainLock.writeLock()).willReturn(writeLock);
-        instance = new ReadWriteLockUtility(mainLock);
+        given(mainLockMock.readLock()).willReturn(readLockMock);
+        given(mainLockMock.writeLock()).willReturn(writeLockMock);
+        instance = new ReadWriteLockUtility(mainLockMock);
     }
 
     /**
@@ -54,17 +58,15 @@ public class ReadWriteLockUtilityTest {
     public void testRead_ReadWriteLockUtilityAction() {
         System.out.println("read");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
+        instance.read(actionMock);
 
-        instance.read(action);
-
-        verify(action, times(1)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(actionMock, times(1)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     /**
@@ -74,17 +76,15 @@ public class ReadWriteLockUtilityTest {
     public void testWrite_ReadWriteLockUtilityAction() {
         System.out.println("write");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
+        instance.write(actionMock);
 
-        instance.write(action);
-
-        verify(action, times(1)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(actionMock, times(1)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 
     /**
@@ -95,19 +95,18 @@ public class ReadWriteLockUtilityTest {
         System.out.println("read-supplier");
 
         Object expectedResult = "null";
-        Supplier supplier = mock(Supplier.class);
-        given(supplier.get()).willReturn(expectedResult);
+        given(supplierMock.get()).willReturn(expectedResult);
 
-        Object result = instance.read(supplier);
+        Object result = instance.read(supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(1)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(supplierMock, times(1)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     /**
@@ -118,19 +117,18 @@ public class ReadWriteLockUtilityTest {
         System.out.println("write-supplier");
 
         Object expectedResult = "null";
-        Supplier supplier = mock(Supplier.class);
-        given(supplier.get()).willReturn(expectedResult);
+        given(supplierMock.get()).willReturn(expectedResult);
 
-        Object result = instance.write(supplier);
+        Object result = instance.write(supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(1)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(supplierMock, times(1)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 
     /**
@@ -140,40 +138,34 @@ public class ReadWriteLockUtilityTest {
     public void testRead_BooleanSupplier_ReadWriteLockUtilityAction_true() {
         System.out.println("read-boolean-action:true");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(true);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(true);
+        instance.read(booleanSupplierMock, actionMock);
 
-        instance.read(booleanSupplier, action);
-
-        verify(action, times(1)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(actionMock, times(1)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     @Test
     public void testRead_BooleanSupplier_ReadWriteLockUtilityAction_false() {
         System.out.println("read-boolean-action:false");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(false);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(false);
+        instance.read(booleanSupplierMock, actionMock);
 
-        instance.read(booleanSupplier, action);
-
-        verify(action, times(0)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(actionMock, times(0)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     /**
@@ -183,40 +175,34 @@ public class ReadWriteLockUtilityTest {
     public void testWrite_BooleanSupplier_ReadWriteLockUtilityAction_true() {
         System.out.println("write-boolean-action:true");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(true);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(true);
+        instance.write(booleanSupplierMock, actionMock);
 
-        instance.write(booleanSupplier, action);
-
-        verify(action, times(1)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(actionMock, times(1)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 
     @Test
     public void testWrite_BooleanSupplier_ReadWriteLockUtilityAction_false() {
         System.out.println("write-boolean-action:false");
 
-        ReadWriteLockUtility.Action action = mock(ReadWriteLockUtility.Action.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(false);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(false);
+        instance.write(booleanSupplierMock, actionMock);
 
-        instance.write(booleanSupplier, action);
-
-        verify(action, times(0)).execute();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(actionMock, times(0)).execute();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 
     /**
@@ -225,44 +211,41 @@ public class ReadWriteLockUtilityTest {
     @Test
     public void testRead_BooleanSupplier_Supplier_true() {
         System.out.println("read-boolean-supplier:true");
+        
         Object expectedResult = "null";
-        Supplier supplier = mock(Supplier.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
+        given(supplierMock.get()).willReturn(expectedResult);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(true);
 
-        given(supplier.get()).willReturn(expectedResult);
-        given(booleanSupplier.getAsBoolean()).willReturn(true);
-
-        Object result = instance.read(booleanSupplier, supplier);
+        Object result = instance.read(booleanSupplierMock, supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(1)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(supplierMock, times(1)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     @Test
     public void testRead_BooleanSupplier_Supplier_false() {
         System.out.println("read-boolean-supplier:false");
+        
         Object expectedResult = null;
-        Supplier supplier = mock(Supplier.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(false);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(false);
 
-        Object result = instance.read(booleanSupplier, supplier);
+        Object result = instance.read(booleanSupplierMock, supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(0)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(1)).lock();
-        verify(readLock, times(1)).unlock();
-        verify(writeLock, times(0)).lock();
-        verify(writeLock, times(0)).unlock();
+        verify(supplierMock, times(0)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(1)).lock();
+        verify(readLockMock, times(1)).unlock();
+        verify(writeLockMock, times(0)).lock();
+        verify(writeLockMock, times(0)).unlock();
     }
 
     /**
@@ -271,43 +254,40 @@ public class ReadWriteLockUtilityTest {
     @Test
     public void testWrite_BooleanSupplier_Supplier_true() {
         System.out.println("write-boolean-supplier:true");
+        
         Object expectedResult = "null";
-        Supplier supplier = mock(Supplier.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
 
-        given(supplier.get()).willReturn(expectedResult);
-        given(booleanSupplier.getAsBoolean()).willReturn(true);
+        given(supplierMock.get()).willReturn(expectedResult);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(true);
 
-        Object result = instance.write(booleanSupplier, supplier);
+        Object result = instance.write(booleanSupplierMock, supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(1)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(supplierMock, times(1)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 
     @Test
     public void testWrite_BooleanSupplier_Supplier_false() {
         System.out.println("write-boolean-supplier:false");
         Object expectedResult = null;
-        Supplier supplier = mock(Supplier.class);
-        BooleanSupplier booleanSupplier = mock(BooleanSupplier.class);
 
-        given(booleanSupplier.getAsBoolean()).willReturn(false);
+        given(booleanSupplierMock.getAsBoolean()).willReturn(false);
 
-        Object result = instance.write(booleanSupplier, supplier);
+        Object result = instance.write(booleanSupplierMock, supplierMock);
 
         assertEquals(expectedResult, result);
-        verify(supplier, times(0)).get();
-        verify(mainLock, times(1)).readLock();
-        verify(mainLock, times(1)).writeLock();
-        verify(readLock, times(0)).lock();
-        verify(readLock, times(0)).unlock();
-        verify(writeLock, times(1)).lock();
-        verify(writeLock, times(1)).unlock();
+        verify(supplierMock, times(0)).get();
+        verify(mainLockMock, times(1)).readLock();
+        verify(mainLockMock, times(1)).writeLock();
+        verify(readLockMock, times(0)).lock();
+        verify(readLockMock, times(0)).unlock();
+        verify(writeLockMock, times(1)).lock();
+        verify(writeLockMock, times(1)).unlock();
     }
 }

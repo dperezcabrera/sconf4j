@@ -37,7 +37,7 @@ public final class PropertyUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyUtils.class);
 
-    public  static final String PROPERTY_DELIMITER = ".";
+    private static final String PROPERTY_DELIMITER = ".";
     private static final Pattern INDEX_PATTERN = Pattern.compile("^\\d+$");
     private static final List<String> ALLOW_PREFIX_LIST = Arrays.asList("get", "is");
 
@@ -49,14 +49,14 @@ public final class PropertyUtils {
     public static Set<String> subproperties(Set<String> properties, String prefix) {
         Set<String> result = new HashSet<>();
         String currentName;
-        String currentPrefix = prefix.concat(PROPERTY_DELIMITER);
+        String currentPrefix = getSubproperty(prefix, Utilities.EMPTY_STRING);
         for (String name : properties) {
             if (name.startsWith(currentPrefix)) {
-                int newNameIndex = name.indexOf(PROPERTY_DELIMITER, prefix.length() + 1);
+                int newNameIndex = name.indexOf(PROPERTY_DELIMITER, currentPrefix.length());
                 if (newNameIndex < 0) {
                     newNameIndex = name.length();
                 }
-                currentName = name.substring(prefix.length() + 1, newNameIndex);
+                currentName = name.substring(currentPrefix.length(), newNameIndex);
                 result.add(currentName);
             }
         }
@@ -69,11 +69,19 @@ public final class PropertyUtils {
     public static boolean isIndex(String value) {
         return INDEX_PATTERN.matcher(value).matches();
     }
+    
+    public static String getSubproperty(String prefix, String value){
+        String result = value;
+        if (!Utilities.isEmpty(prefix)){
+            result = String.join(PROPERTY_DELIMITER, prefix, result);
+        }
+        return result;
+    }
 
     public static String getPropertyFromMethod(Method method, String prefix) {
         String result = getPropertyFromMethod(method);
         if (!Utilities.isEmpty(result) && !Utilities.isEmpty(prefix)) {
-            result = String.join(PROPERTY_DELIMITER, prefix, result);
+            result = getSubproperty(prefix, result);
         }
         return result;
     }

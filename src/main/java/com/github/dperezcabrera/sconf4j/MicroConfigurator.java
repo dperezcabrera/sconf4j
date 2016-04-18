@@ -27,7 +27,6 @@ import com.github.dperezcabrera.sconf4j.factories.loader.CollectionsLoader;
 import com.github.dperezcabrera.sconf4j.factories.loader.DefaultContructorFactoryLoader;
 import com.github.dperezcabrera.sconf4j.factories.loader.DefaultInterfaceFactoryLoader;
 import com.github.dperezcabrera.sconf4j.factories.loader.MappingFactoryLoader;
-import com.github.dperezcabrera.sconf4j.factories.loader.NoContructorFoundLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,7 +41,7 @@ import java.util.Set;
  */
 public class MicroConfigurator<K> extends AbstractConfigurator<K> {
 
-    private static final ContainerLoader[] DEFAULT_LOADERS = new ContainerLoader[]{new BasicFactoryLoader(), new CollectionsLoader(), new MappingFactoryLoader(defaultMapping()), new DefaultContructorFactoryLoader(), new DefaultInterfaceFactoryLoader(), new NoContructorFoundLoader()};
+    private static final ContainerLoader[] DEFAULT_LOADERS = new ContainerLoader[]{new BasicFactoryLoader(), new CollectionsLoader(), new MappingFactoryLoader(defaultMapping()), new DefaultContructorFactoryLoader(), new DefaultInterfaceFactoryLoader()};
 
     public MicroConfigurator(Class<K> type) {
         super(type);
@@ -59,21 +58,6 @@ public class MicroConfigurator<K> extends AbstractConfigurator<K> {
         result.put(Set.class, HashSet.class);
         result.put(Map.class, HashMap.class);
         return result;
-    }
-
-    @Override
-    public <T> T get(Class<T> target) {
-        return (T) context.getBeanContainer().get(new DataContextBase(new PropertiesDataProvider(new Properties()), context.getBeanContainer()), "", new TypeSupplierBase(() -> target));
-    }
-
-    @Override
-    public <T> T get(Class<T> target, String param) {
-        return (T) context.getBeanContainer().get(new DataContextBase(new PropertiesDataProvider(new Properties()), context.getBeanContainer()), param, new TypeSupplierBase(() -> target));
-    }
-
-    @Override
-    public <T> T get(Class<T> target, Properties properties) {
-        return (T) context.getBeanContainer().get(new DataContextBase(new PropertiesDataProvider(properties), context.getBeanContainer()), "", new TypeSupplierBase(() -> target));
     }
 
     @Override

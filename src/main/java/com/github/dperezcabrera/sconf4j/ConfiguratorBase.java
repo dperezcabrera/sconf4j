@@ -56,12 +56,6 @@ public class ConfiguratorBase<K> extends AbstractConfigurator<K> {
     }
 
     @Override
-    public <T> T get(Class<T> target, Properties properties) {
-        ConfiguratorContext cc = context;
-        return (T) cc.getBeanContainer().get(new DataContextBase(new PropertiesDataProvider(properties), cc.getBeanContainer()), "", new TypeSupplierBase(() -> target));
-    }
-
-    @Override
     public <T> T get(Class<T> target, Properties properties, String param) {
         ConfiguratorContext cc = context;
         return (T) cc.getBeanContainer().get(new DataContextBase(new PropertiesDataProvider(properties), cc.getBeanContainer()), param, new TypeSupplierBase(() -> target));

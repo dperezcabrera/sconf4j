@@ -32,7 +32,7 @@ public class TypeSupplierBase implements TypeSupplier {
     
     @Override
     public TypeSupplier getPropertyTypeSupplier(String propertyName) {
-        return null;
+        throw new UnsupportedOperationException("getPropertyTypeSupplier() is not supported");
     }
 
     @Override

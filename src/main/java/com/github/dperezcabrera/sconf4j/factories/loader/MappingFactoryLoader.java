@@ -17,22 +17,19 @@
 package com.github.dperezcabrera.sconf4j.factories.loader;
 
 import com.github.dperezcabrera.sconf4j.core.BeanFactory;
+import com.github.dperezcabrera.sconf4j.core.ConfiguratorException;
 import com.github.dperezcabrera.sconf4j.core.utils.PropertyUtils;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
 public class MappingFactoryLoader extends AbstractLoader {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MappingFactoryLoader.class);
 
     public MappingFactoryLoader(Map<Class<?>, Class<?>> interfacesMapping) {
         super(getFactories(interfacesMapping));
@@ -43,9 +40,9 @@ public class MappingFactoryLoader extends AbstractLoader {
         Map<Class<?>, Class<?>> mapping = new HashMap<>();
         for (Entry<Class<?>, Class<?>> e : interfacesMapping.entrySet()) {
             if (!PropertyUtils.isCommonObject(e.getValue())) {
-                LOGGER.warn("The default class {} for {} isn't a valid class. It will be ignored.", e.getKey(), e.getValue());
+                throw new ConfiguratorException("The default class "+e.getKey()+" for "+e.getValue()+" isn't a valid class.");
             } else if (!e.getKey().isAssignableFrom(e.getValue())) {
-                LOGGER.warn("The default class {} isn't assignable {}. It will be ignored.", e.getKey(), e.getValue());
+                throw new ConfiguratorException("The default class "+e.getKey()+" isn't assignable "+e.getValue()+".");
             } else {
                 mapping.put(e.getKey(), e.getValue());
             }

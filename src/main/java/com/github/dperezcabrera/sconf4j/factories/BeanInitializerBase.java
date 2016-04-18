@@ -83,7 +83,7 @@ public class BeanInitializerBase implements BeanInitializer {
         if (!names.isEmpty()) {
             for (String childProperty : names) {
                 TypeSupplier childTypeSupplier = typeSupplier.getPropertyTypeSupplier(childProperty);
-                Supplier<Object> childSupplier = () -> dataSet.getBeanFactory().get(dataSet, String.join(PropertyUtils.PROPERTY_DELIMITER, propertyName, childProperty), childTypeSupplier);
+                Supplier<Object> childSupplier = () -> dataSet.getBeanFactory().get(dataSet, PropertyUtils.getSubproperty(propertyName, childProperty), childTypeSupplier);
                 adder.add(obj, childProperty, childSupplier, childTypeSupplier.get());
             }
         }

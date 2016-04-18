@@ -28,7 +28,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
-import static org.mockito.Mockito.mock;
 
 /**
  *
@@ -48,6 +47,22 @@ public class PropertyUtilsTest {
 
         Set<String> properties = new HashSet<>(Arrays.asList("a.1.m", "a.2.tr.ta", "a.3.yt"));
         String prefix = "a";
+        Set<String> expResult = new HashSet<>(Arrays.asList("1", "2", "3"));
+
+        Set<String> result = PropertyUtils.subproperties(properties, prefix);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of subproperties method, of class PropertyUtils.
+     */
+    @Test
+    public void testSubpropertiesEmptyPrefix() {
+        System.out.println("subproperties empty prefix");
+
+        Set<String> properties = new HashSet<>(Arrays.asList("1.m", "2.tr.ta", "3.yt"));
+        String prefix = "";
         Set<String> expResult = new HashSet<>(Arrays.asList("1", "2", "3"));
 
         Set<String> result = PropertyUtils.subproperties(properties, prefix);
@@ -322,7 +337,7 @@ public class PropertyUtilsTest {
 
         Class type = int.class;
         Class valueType = short.class;
-        
+
         int expResult = -1;
         int result = PropertyUtils.typeDistance(type, valueType);
 
@@ -333,7 +348,7 @@ public class PropertyUtilsTest {
      * Test of typeDistance method, of class PropertyUtils.
      */
     @Test
-    public void testTypeDistanceSameType() {
+    public void testTypeDistance() {
         System.out.println("typeDistanceSameType");
 
         Class type = Integer.class;
@@ -368,7 +383,7 @@ public class PropertyUtilsTest {
 
         Class type = Collection.class;
         Class valueType = List.class;
-        
+
         int expResult = 1;
         int result = PropertyUtils.typeDistance(type, valueType);
 
@@ -418,7 +433,7 @@ public class PropertyUtilsTest {
 
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of getPropertyFromMethod method, of class PropertyUtils.
      */
@@ -433,8 +448,8 @@ public class PropertyUtilsTest {
 
         assertEquals(expResult, result);
     }
-    
-        /**
+
+    /**
      * Test of getPropertyFromMethod method, of class PropertyUtils.
      */
     @Test
@@ -448,7 +463,7 @@ public class PropertyUtilsTest {
 
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test of getPropertyFromMethod method, of class PropertyUtils.
      */
@@ -469,9 +484,53 @@ public class PropertyUtilsTest {
         public int getSomething() {
             return 0;
         }
-        
-        public void nothing(){
+
+        public void nothing() {
         }
     }
 
+    /**
+     * Test of getSubproperty method, of class PropertyUtils.
+     */
+    @Test
+    public void testGetSubproperty() {
+        System.out.println("getSubproperty prefix: empty");
+        String prefix = "";
+        String value = "";
+        String expResult = "";
+
+        String result = PropertyUtils.getSubproperty(prefix, value);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getSubproperty method, of class PropertyUtils.
+     */
+    @Test
+    public void testGetSubpropertyPrefixNull() {
+        System.out.println("getSubproperty prefix: null");
+        String prefix = null;
+        String value = "";
+        String expResult = "";
+
+        String result = PropertyUtils.getSubproperty(prefix, value);
+
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of getSubproperty method, of class PropertyUtils.
+     */
+    @Test
+    public void testGetSubpropertyOK() {
+        System.out.println("getSubproperty prefix: 'a' value: 'b'");
+        String prefix = "a";
+        String value = "b";
+        String expResult = "a.b";
+
+        String result = PropertyUtils.getSubproperty(prefix, value);
+
+        assertEquals(expResult, result);
+    }
 }

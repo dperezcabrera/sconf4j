@@ -37,7 +37,6 @@ public class ExampleConfigurableTest {
         final Configurator<ExampleConfigurableTest> configurator = ConfiguratorFactory.configurator(ExampleConfigurableTest.class);
         exampleConfig = configurator.get(ExampleConfiguration.class, properties4example(param), param);
     }
-    //*
 
     @Test
     public void configGet2DArray() {
@@ -229,7 +228,6 @@ public class ExampleConfigurableTest {
         assertNull(exampleConfig.getNull());
     }
 
-    //*/
     private Properties properties4example(String prefix) {
         Properties p = new Properties();
         p.setProperty(prefix + ".index", "111");

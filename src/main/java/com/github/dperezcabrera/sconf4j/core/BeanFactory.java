@@ -23,5 +23,5 @@ package com.github.dperezcabrera.sconf4j.core;
 @FunctionalInterface 
 public interface BeanFactory {
 
-    Object get(DataContext dataSet, String propertyName, TypeSupplier typeSupplier);
+    Object get(DataContext context, String propertyName, TypeSupplier typeSupplier);
 }

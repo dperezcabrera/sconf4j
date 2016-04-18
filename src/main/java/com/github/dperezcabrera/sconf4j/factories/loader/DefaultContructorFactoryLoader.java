@@ -38,11 +38,11 @@ public class DefaultContructorFactoryLoader extends AbstractLoader {
 
         LinkedHashMap<Predicate<Class<?>>, BeanFactory> result = new LinkedHashMap<>();
         result.put(DefaultContructorFactoryLoader::checkPredicate,
-                (dataSet, propertyName, typeSupplier) -> {
-                    String propertyValue = dataSet.getDataProvider().getProperty(propertyName);
+                (context, propertyName, typeSupplier) -> {
+                    String propertyValue = context.getDataProvider().getProperty(propertyName);
                     Class<?> type = typeSupplier.get();
                     if (propertyValue != null && !propertyValue.equals(type.getName())) {
-                        return dataSet.getBeanFactory().get(dataSet, propertyName, new TypeSupplierBase(() -> PropertyUtils.classForName(propertyValue)));
+                        return context.getBeanFactory().get(context, propertyName, new TypeSupplierBase(() -> PropertyUtils.classForName(propertyValue)));
                     } else {
                         return PropertyUtils.newInstance(type);
                     }
@@ -55,7 +55,7 @@ public class DefaultContructorFactoryLoader extends AbstractLoader {
         boolean result = false;
         if (PropertyUtils.isCommonObject(type)) {
             for (Constructor constructor : type.getConstructors()) {
-                if (constructor.getParameterCount() == 0 && Modifier.isPublic(constructor.getModifiers())) {
+                if (constructor.getParameterCount() == 0) {
                     return true;
                 }
             }

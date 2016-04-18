@@ -46,8 +46,8 @@ public class BasicFactoryLoader extends AbstractLoader {
     private static LinkedHashMap<Predicate<Class<?>>, BeanFactory> getFactories() {
         LinkedHashMap<Predicate<Class<?>>, BeanFactory> result = new LinkedHashMap<>();
         result.put(type -> type == Class.class, build(PropertyUtils::classForName));
-        result.put(Class::isEnum, build((dataSet, propertyName, typeSupplier) -> Enum.valueOf((Class<? extends Enum>) typeSupplier.get(), dataSet.getDataProvider().getProperty(propertyName))));
-        result.put(type -> type == String.class, build((dataSet, propertyName, typeSupplier) -> dataSet.getDataProvider().getProperty(propertyName)));
+        result.put(Class::isEnum, build((context, propertyName, typeSupplier) -> Enum.valueOf((Class<? extends Enum>) typeSupplier.get(), context.getDataProvider().getProperty(propertyName))));
+        result.put(type -> type == String.class, build((context, propertyName, typeSupplier) -> context.getDataProvider().getProperty(propertyName)));
         result.put(Utilities::isBoolean, build(Boolean::valueOf));
         result.put(Utilities::isByte, build(Byte::valueOf));
         result.put(Utilities::isDouble, build(Double::valueOf));
@@ -55,9 +55,9 @@ public class BasicFactoryLoader extends AbstractLoader {
         result.put(Utilities::isInteger, build(Integer::valueOf));
         result.put(Utilities::isLong, build(Long::valueOf));
         result.put(Utilities::isShort, build(Short::valueOf));
-        result.put(Utilities::isCharacter, build((dataSet, propertyName, typeSupplier) -> {
+        result.put(Utilities::isCharacter, build((context, propertyName, typeSupplier) -> {
             Object obj = null;
-            String value = dataSet.getDataProvider().getProperty(propertyName);
+            String value = context.getDataProvider().getProperty(propertyName);
             if (value.length() == 1) {
                 obj = value.charAt(0);
             } else {

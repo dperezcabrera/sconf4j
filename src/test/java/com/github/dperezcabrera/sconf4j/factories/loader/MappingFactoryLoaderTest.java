@@ -14,46 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.dperezcabrera.sconf4j.factories;
+package com.github.dperezcabrera.sconf4j.factories.loader;
 
 import com.github.dperezcabrera.sconf4j.core.ConfiguratorException;
-import com.github.dperezcabrera.sconf4j.core.DataContext;
-import com.github.dperezcabrera.sconf4j.core.DataProvider;
-import com.github.dperezcabrera.sconf4j.core.TypeSupplier;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class BeanContainerBaseTest {
+public class MappingFactoryLoaderTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    /**
-     * Test of get method, of class BeanContainerBase.
-     */
     @Test
-    public void testGet() {
-        System.out.println("get");
-
-        String propertyName = null;
-        TypeSupplier typeSupplierMock = mock(TypeSupplier.class);
-        DataContext dataSetMock = mock(DataContext.class);
-        DataProvider dataProviderMock = mock(DataProvider.class);
-        given(typeSupplierMock.get()).willReturn(null);
-        given(dataSetMock.getDataProvider()).willReturn(dataProviderMock);
-        given(dataProviderMock.getSubProperties(propertyName)).willReturn(new HashSet<>(Arrays.asList("a")));
+    public void testWrongMappingToInterface() {
+        System.out.println("wrongMapping: interface to interface");
         
+        Map<Class<?>, Class<?>> interfacesMapping = new HashMap<>();
+        interfacesMapping.put(List.class, List.class);
         thrown.expect(ConfiguratorException.class);
+        thrown.expectMessage(startsWith("The default class"));
         
-        new BeanContainerBase().get(dataSetMock, propertyName, typeSupplierMock);
+        new MappingFactoryLoader(interfacesMapping);
+    }
+
+    @Test
+    public void testWrongMappingNotAssignable() {
+        System.out.println("wrongMapping: not assignable");
+        
+        Map<Class<?>, Class<?>> interfacesMapping = new HashMap<>();
+        interfacesMapping.put(Set.class, HashMap.class);
+        thrown.expect(ConfiguratorException.class);
+        thrown.expectMessage(startsWith("The default class"));
+        
+        new MappingFactoryLoader(interfacesMapping);
     }
 }

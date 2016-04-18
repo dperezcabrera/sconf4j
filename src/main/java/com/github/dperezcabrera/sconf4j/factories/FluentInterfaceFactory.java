@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 public class FluentInterfaceFactory implements BeanFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FluentInterfaceFactory.class);
+    private static final String UNESPECTED_DEFINITION_MESSAGE = "Unespected definition '{}'";
 
     @Override
     public Object get(DataContext dataSet, String prefix, TypeSupplier supplier) {
@@ -62,18 +63,18 @@ public class FluentInterfaceFactory implements BeanFactory {
         private static void checkIgnoreMethod(Method method, Set<Method> ignoreSet) {
             Class<?> returnType = method.getReturnType();
             if (returnType == void.class || method.getParameterCount() > 1) {
-                LOGGER.warn("Unespected definition '{}'", method);
+                LOGGER.warn(UNESPECTED_DEFINITION_MESSAGE, method);
                 ignoreSet.add(method);
             } else if (!method.getName().startsWith("get")) {
                 if (!method.getName().startsWith("is")) {
-                    LOGGER.warn("Unespected definition '{}'", method);
+                    LOGGER.warn(UNESPECTED_DEFINITION_MESSAGE, method);
                     ignoreSet.add(method);
                 } else if (returnType != boolean.class && returnType != Boolean.class) {
-                    LOGGER.warn("Unespected definition '{}'", method);
+                    LOGGER.warn(UNESPECTED_DEFINITION_MESSAGE, method);
                     ignoreSet.add(method);
                 }
             } else if (method.getParameterCount() == 1 && returnType != method.getParameterTypes()[0]) {
-                LOGGER.warn("Unespected definition '{}'", method);
+                LOGGER.warn(UNESPECTED_DEFINITION_MESSAGE, method);
                 ignoreSet.add(method);
             } else {
                 getIgnoreMethods(returnType);

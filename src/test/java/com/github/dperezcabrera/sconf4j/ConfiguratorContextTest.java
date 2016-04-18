@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2016 David Pérez Cabrera <dperezcabrera@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,29 @@
  */
 package com.github.dperezcabrera.sconf4j;
 
+import com.github.dperezcabrera.sconf4j.core.BeanContainer;
+import com.github.dperezcabrera.sconf4j.factories.BeanContainerBase;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
- * @param <T>
  */
-@FunctionalInterface
-public interface Subscriber<T> {
+public class ConfiguratorContextTest {
 
-    public void onChange(T obj);
+    /**
+     * Test of getBeanContainer method, of class ConfiguratorContext.
+     */
+    @Test
+    public void testGetBeanContainer() {
+        System.out.println("getBeanContainer");
+        
+        ConfiguratorContext instance = new ConfiguratorContext(null);
+        BeanContainer expResult = new BeanContainerBase();
+        instance.setBeanContainer(expResult);
+                
+        BeanContainer result = instance.getBeanContainer();
+        assertEquals(expResult, result);
+    }
 }
