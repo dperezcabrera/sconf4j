@@ -16,36 +16,31 @@
  */
 package com.github.dperezcabrera.sconf4j;
 
-import com.github.dperezcabrera.sconf4j.core.BeanContainer;
-import com.github.dperezcabrera.sconf4j.core.ContainerLoader;
 import com.github.dperezcabrera.sconf4j.core.DataContextBase;
 import com.github.dperezcabrera.sconf4j.core.data.PropertiesDataProvider;
 import com.github.dperezcabrera.sconf4j.core.TypeSupplierBase;
-import com.github.dperezcabrera.sconf4j.factories.BeanContainerBase;
 import java.util.Properties;
 
 /**
  *
  * @author David Pérez Cabrera <dperezcabrera@gmail.com>
  */
-public class ConfiguratorBase<K> extends AbstractConfigurator<K> {
+public class ConfiguratorBase<K> implements Configurator<K> {
 
-    public ConfiguratorBase(Class<K> type) {
-        super(type);
-        Configuration config = (Configuration) ConfiguratorFactory.configurator(Configurator.class).get(Configuration.class);
-        BeanContainer container = new BeanContainerBase();
-        for (ContainerLoader defaultLoader : config.getLoaders()) {
-            defaultLoader.load(container);
-        }
-        this.context = new ConfiguratorContext(container);
+    private static final String NOT_SUPPORTED_YET_EXCEPTION_MESSAGE = "Not supported yet.";
+
+    protected final Class<K> type;
+    protected volatile ConfiguratorContext context;
+
+    public ConfiguratorBase(Class<K> type, ConfiguratorContext context) {
+        this.type = type;
+        this.context = context;
     }
 
-    interface Configuration {
-
-        ContainerLoader[] getLoaders();
-        int getInt();
+    @Override
+    public Class<K> getType() {
+        return type;
     }
-
 
     public ConfiguratorContext getContext() {
         return context;
@@ -53,6 +48,26 @@ public class ConfiguratorBase<K> extends AbstractConfigurator<K> {
 
     public void setContext(ConfiguratorContext context) {
         this.context = context;
+    }
+
+    @Override
+    public <T> T get(Class<T> target) {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET_EXCEPTION_MESSAGE);
+    }
+
+    @Override
+    public <T> T get(Class<T> target, String param) {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET_EXCEPTION_MESSAGE);
+    }
+
+    @Override
+    public <T> T get(Class<T> target, Properties properties) {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET_EXCEPTION_MESSAGE);
+    }
+
+    @Override
+    public <T> void subscribe(Class<T> target, Subscriber<T> subscriber) {
+        throw new UnsupportedOperationException(NOT_SUPPORTED_YET_EXCEPTION_MESSAGE);
     }
 
     @Override

@@ -16,8 +16,22 @@
  */
 package com.github.dperezcabrera.sconf4j;
 
+import com.github.dperezcabrera.sconf4j.core.BeanContainer;
+import com.github.dperezcabrera.sconf4j.core.ContainerLoader;
 import com.github.dperezcabrera.sconf4j.core.utils.ConcurrentCache;
 import com.github.dperezcabrera.sconf4j.core.utils.ReadWriteLockCache;
+import com.github.dperezcabrera.sconf4j.factories.BeanContainerBase;
+import com.github.dperezcabrera.sconf4j.factories.loader.BasicFactoryLoader;
+import com.github.dperezcabrera.sconf4j.factories.loader.CollectionsLoader;
+import com.github.dperezcabrera.sconf4j.factories.loader.DefaultContructorFactoryLoader;
+import com.github.dperezcabrera.sconf4j.factories.loader.DefaultInterfaceFactoryLoader;
+import com.github.dperezcabrera.sconf4j.factories.loader.MappingFactoryLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -28,7 +42,6 @@ public final class ConfiguratorFactory {
     private static final ConfiguratorFactory INSTANCE = new ConfiguratorFactory();
 
     private ConcurrentCache<Class<?>, Configurator> configurators = new ReadWriteLockCache<>();
-    private ConfiguratorBuilder builder = type -> new MicroConfigurator(type);
 
     private ConfiguratorFactory() {
     }
@@ -37,13 +50,28 @@ public final class ConfiguratorFactory {
         return INSTANCE.getConfigurator(typeOwner);
     }
 
-    private <K> Configurator<K> getConfigurator(Class<K> typeOwner) {
-        return configurators.get(typeOwner, () -> builder.build(typeOwner));
+    public static <K> Configurator<K> configurator(Class<K> typeOwner, ConfiguratorContext context) {
+        return new ConfiguratorBase<>(typeOwner, context);
     }
 
-    @FunctionalInterface
-    private interface ConfiguratorBuilder<T> {
+    private <K> Configurator<K> getConfigurator(Class<K> typeOwner) {
+        return configurators.get(typeOwner, () -> new ConfiguratorBase(typeOwner, getConfiguration(typeOwner)));
+    }
+    
+    private <K> ConfiguratorContext getConfiguration(Class<K> typeOwner){
+        return getDefaultConfiguratorContext();
+    }
 
-        Configurator<T> build(Class<T> type);
+    private static ConfiguratorContext getDefaultConfiguratorContext() {
+        Map<Class<?>, Class<?>> mapping = new HashMap<>();
+        mapping.put(List.class, ArrayList.class);
+        mapping.put(Set.class, HashSet.class);
+        mapping.put(Map.class, HashMap.class);
+        ContainerLoader[] defaultLoaders = new ContainerLoader[]{new BasicFactoryLoader(), new CollectionsLoader(), new MappingFactoryLoader(mapping), new DefaultContructorFactoryLoader(), new DefaultInterfaceFactoryLoader()};
+        BeanContainer container = new BeanContainerBase();
+        for (ContainerLoader defaultLoader : defaultLoaders) {
+            defaultLoader.load(container);
+        }
+        return new ConfiguratorContext(container);
     }
 }
