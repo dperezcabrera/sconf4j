@@ -48,7 +48,7 @@ public class TypeMethodSupplier implements TypeSupplier {
     @Override
     public TypeSupplier getPropertyTypeSupplier(String propertyName) {
         if (propertyName == null){
-            throw new NullPointerException("PropertyName cant not be null");
+            throw new NullPointerException("PropertyName can't not be null");
         }
         TypeSupplier result;
         if (PropertyUtils.isIndex(propertyName)) {
