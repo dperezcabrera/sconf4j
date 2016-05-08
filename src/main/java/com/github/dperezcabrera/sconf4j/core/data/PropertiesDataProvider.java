@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class PropertiesDataProvider implements DataProvider {
 
-    Properties properties;
+    private Properties properties;
 
     public PropertiesDataProvider(Properties properties) {
         this.properties = properties;

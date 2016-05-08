@@ -55,10 +55,10 @@ public final class ConfiguratorFactory {
     }
 
     private <K> Configurator<K> getConfigurator(Class<K> typeOwner) {
-        return configurators.get(typeOwner, () -> new ConfiguratorBase(typeOwner, getConfiguration(typeOwner)));
+        return configurators.get(typeOwner, () -> new ConfiguratorBase(typeOwner, getConfiguration()));
     }
     
-    private ConfiguratorContext getConfiguration(Class<?> typeOwner){
+    private ConfiguratorContext getConfiguration(){
         return getDefaultConfiguratorContext();
     }
 

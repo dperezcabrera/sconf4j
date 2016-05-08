@@ -114,7 +114,7 @@ public class CollectionsLoader extends AbstractLoader {
     }
 
     private static Object callMethod(Object target, String name, Supplier<Object> elementSupplier, Class<?> elementType) {
-        Method method = getSetter(target.getClass(), name, elementType);;
+        Method method = getSetter(target.getClass(), name, elementType);
         try {
             return method.invoke(target, new Object[]{elementSupplier.get()});
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
