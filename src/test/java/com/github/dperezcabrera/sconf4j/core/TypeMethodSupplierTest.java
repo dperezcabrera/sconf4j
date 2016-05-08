@@ -42,7 +42,7 @@ public class TypeMethodSupplierTest {
         TypeMethodSupplier instance = new TypeMethodSupplier(EmptyProvider.class.getMethod("getEmpty"), 0);
 
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage("PropertyName cant not be null");
+        thrown.expectMessage("PropertyName can't not be null");
 
         instance.getPropertyTypeSupplier(propertyName);
     }
