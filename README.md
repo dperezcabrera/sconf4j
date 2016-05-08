@@ -1,6 +1,7 @@
 [![License](http://img.shields.io/:license-gpl3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 [![Build Status](https://travis-ci.org/dperezcabrera/sconf4j.svg?branch=master)](https://travis-ci.org/dperezcabrera/sconf4j)
 [![Coverage Status](https://coveralls.io/repos/github/dperezcabrera/sconf4j/badge.svg?branch=master)](https://coveralls.io/github/dperezcabrera/sconf4j?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5988bcd325c14e1ba8723618c3c98c60)](https://www.codacy.com/app/dperezcabrera/sconf4j?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dperezcabrera/sconf4j&amp;utm_campaign=Badge_Grade)
 [![GitHub issues](https://img.shields.io/github/issues-raw/dperezcabrera/sconf4j.svg?maxAge=2592000)](https://github.com/dperezcabrera/sconf4j/issues)
 
 
