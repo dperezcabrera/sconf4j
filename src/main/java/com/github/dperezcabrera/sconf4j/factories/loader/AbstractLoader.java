@@ -29,8 +29,8 @@ import java.util.function.Predicate;
  */
 public abstract class AbstractLoader implements ContainerLoader {
 
-    Map<Predicate<Class<?>>, BeanFactory> factories;
-    Map<Predicate<Class<?>>, BeanInitializer> initializers = null;
+    private Map<Predicate<Class<?>>, BeanFactory> factories;
+    private Map<Predicate<Class<?>>, BeanInitializer> initializers = null;
 
     public AbstractLoader(Map<Predicate<Class<?>>, BeanFactory> factories) {
         this.factories = factories;

@@ -29,8 +29,7 @@ import java.util.function.Supplier;
  */
 public class ReadWriteLockCache<K, V> implements ConcurrentCache<K, V> {
 
-    Map<K, V> cache = new HashMap<>();
-
+    private Map<K, V> cache = new HashMap<>();
     private final Lock readLock;
     private final Lock writeLock;
 

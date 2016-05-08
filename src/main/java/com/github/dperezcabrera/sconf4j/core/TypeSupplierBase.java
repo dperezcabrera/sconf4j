@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 public class TypeSupplierBase implements TypeSupplier {
 
-    Supplier<Class<?>> supplier;
+    private Supplier<Class<?>> supplier;
 
     public TypeSupplierBase(Supplier<Class<?>> supplier) {
         this.supplier = supplier;

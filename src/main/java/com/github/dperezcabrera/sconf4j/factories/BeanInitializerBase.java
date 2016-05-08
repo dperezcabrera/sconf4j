@@ -33,12 +33,6 @@ import java.util.stream.IntStream;
  */
 public class BeanInitializerBase implements BeanInitializer {
 
-    @FunctionalInterface
-    public static interface Adder {
-
-        void add(Object target, String name, Supplier<Object> childSupplier, Class<?> childType);
-    }
-
     private Adder adder;
 
     public BeanInitializerBase(Adder adder) {
@@ -89,4 +83,11 @@ public class BeanInitializerBase implements BeanInitializer {
         }
         return obj;
     }
+    
+    @FunctionalInterface
+    public static interface Adder {
+
+        void add(Object target, String name, Supplier<Object> childSupplier, Class<?> childType);
+    }
+
 }

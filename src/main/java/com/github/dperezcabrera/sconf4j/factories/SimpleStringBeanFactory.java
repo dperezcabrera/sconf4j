@@ -27,7 +27,7 @@ import java.util.function.Function;
  */
 public class SimpleStringBeanFactory implements BeanFactory {
 
-    Function<String, Object> function;
+    private Function<String, Object> function;
 
     public SimpleStringBeanFactory(Function<String, Object> function) {
         this.function = function;

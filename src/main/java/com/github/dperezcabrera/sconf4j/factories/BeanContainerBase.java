@@ -36,11 +36,11 @@ import com.github.dperezcabrera.sconf4j.core.ConfiguratorException;
  */
 public class BeanContainerBase implements BeanContainer {
 
-    Map<Predicate<Class<?>>, BeanFactory> beanFactories = new LinkedHashMap<>();
-    Map<Predicate<Class<?>>, BeanInitializer> beanInitializers = new LinkedHashMap<>();
+    private Map<Predicate<Class<?>>, BeanFactory> beanFactories = new LinkedHashMap<>();
+    private Map<Predicate<Class<?>>, BeanInitializer> beanInitializers = new LinkedHashMap<>();
 
-    ReadWriteLockUtility lockUtility = new ReadWriteLockUtility();
-    Map<String, Object> cache = new HashMap<>();
+    private ReadWriteLockUtility lockUtility = new ReadWriteLockUtility();
+    private Map<String, Object> cache = new HashMap<>();
 
     @Override
     public void register(Predicate<Class<?>> predicate, BeanInitializer initializer) {

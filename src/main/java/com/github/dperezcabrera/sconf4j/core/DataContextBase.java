@@ -22,8 +22,8 @@ package com.github.dperezcabrera.sconf4j.core;
  */
 public class DataContextBase implements DataContext {
 
-    DataProvider dataProvider;
-    BeanFactory beanFactory;
+    private DataProvider dataProvider;
+    private BeanFactory beanFactory;
 
     public DataContextBase(DataProvider dataProvider, BeanFactory beanFactory) {
         this.dataProvider = dataProvider;
