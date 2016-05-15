@@ -9,7 +9,7 @@ cache:
   directories:
   - "$HOME/.m2"
 after_success:
-- mvn clean test org.jacoco:jacoco-maven-plugin:0.7.6.201602180812:prepare-agent org.jacoco:jacoco-maven-plugin:0.7.6.201602180812:report coveralls:jacoco -DTRAVIS_JOB_ID=$TRAVIS_JOB_ID
+- mvn clean test jacoco:report coveralls:jacoco -DTRAVIS_JOB_ID=$TRAVIS_JOB_ID
 
 notifications:
   email:
@@ -20,3 +20,4 @@ env:
     - GIT_DEPENDENCIES=""
     - GH_USERNAME=dperezcabrera
     - GH_REPO=dperezcabrera/sconf4j
+

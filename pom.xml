@@ -46,6 +46,7 @@
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         
         <coveralls-maven-plugin-version>2.2.0</coveralls-maven-plugin-version>
+        <jacoco-maven-plugin-version>0.7.6.201602180812</jacoco-maven-plugin-version>
     </properties>
     
     <dependencies>        
@@ -84,6 +85,19 @@
                     <sourceEncoding>UTF8</sourceEncoding>
                     <repoToken>${env.coveralls_repo_token}</repoToken>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
