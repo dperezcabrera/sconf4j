@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/dperezcabrera/sconf4j.svg?branch=master)](https://travis-ci.org/dperezcabrera/sconf4j)
 [![Quality Gate](https://sonarcloud.io/api/badges/gate?key=com.github.dperezcabrera:sconf4j)](https://sonarcloud.io/dashboard/index/com.github.dperezcabrera:sconf4j)
 [![GitHub issues](https://img.shields.io/github/issues-raw/dperezcabrera/sconf4j.svg?maxAge=2592000)](https://github.com/dperezcabrera/sconf4j/issues)
-
+[![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/dperezcabrera/sconf4j)
 
 # Simple Configurator for Java
 
